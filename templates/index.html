@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ text.title }}</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f7f2;
+            color: #333;
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+           ===================================================== */
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+
+        /* =====================================================
+           TITLE - OUTSIDE CARD
+           ===================================================== */
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+
+        .page-title h1 {
+            margin: 0;
+            color: #245c32;
+            font-size: 30px;
+        }
+
+
+        .page-title p {
+            margin-top: 8px;
+            color: #666;
+            font-size: 16px;
+        }
+
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* =====================================================
+           LEFT + RIGHT
+           ===================================================== */
+
+        .main-content {
+            display: flex;
+            gap: 35px;
+            padding: 10px;
+        }
+
+
+        /* =====================================================
+           LEFT SIDE
+           ===================================================== */
+
+        .left-side {
+            width: 40%;
+        }
+
+
+        /* =====================================================
+           LANGUAGE
+           ===================================================== */
+
+        .language-box {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+
+        .language-box select {
+            padding: 6px 10px;
+            border: 1px solid #7aa982;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           UPLOAD BUTTON
+           ===================================================== */
+
+        .upload-button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+
+        .upload-button:hover {
+            background: #256628;
+        }
+
+
+        #image {
+            display: none;
+        }
+
+
+        /* =====================================================
+           IMAGE
+           ===================================================== */
+
+        .image-container {
+            width: 100%;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+
+        .uploaded-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+
+        .no-image {
+            color: #888;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           PREDICT BUTTON
+           ===================================================== */
+
+        .predict-button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+
+        .predict-button:hover {
+            background: #256628;
+        }
+
+
+        /* =====================================================
+           RIGHT SIDE
+           ===================================================== */
+
+        .right-side {
+            width: 60%;
+            text-align: left;
+        }
+
+
+        .right-side h2 {
+            color: #6b4b16;
+            font-size: 23px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+
+        /* =====================================================
+           DISEASE DETECTION
+           ===================================================== */
+
+        .detection {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+
+        .detection-value {
+            color: #245c32;
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           SEVERITY
+           ===================================================== */
+
+        .severity {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+
+        .severity-value {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           HEALTHY
+           ===================================================== */
+
+        .healthy {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-top: 20px;
+        }
+
+
+        /* =====================================================
+           UNKNOWN
+           ===================================================== */
+
+        .unknown {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c62828;
+            margin-top: 20px;
+        }
+
+
+        .unknown-message {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           SECTION TITLES
+           ===================================================== */
+
+        .section-title {
+            color: #8b321f;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 14px;
+            margin-bottom: 8px;
+        }
+
+
+        /* =====================================================
+           LIST
+           ===================================================== */
+
+        ul {
+            margin-top: 5px;
+            padding-left: 20px;
+        }
+
+
+        li {
+            margin-bottom: 6px;
+            line-height: 1.4;
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           ERROR
+           ===================================================== */
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .history-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: #1976d2;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.history-button:hover {
+    background: #0d47a1;
+}
+
+.predict-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.predict-button:hover {
+    background: #1b5e20;
+}
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-side,
+            .right-side {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         TITLE OUTSIDE CARD
+         ===================================================== -->
+
+    <div class="page-title">
+
+        <h1>
+            🌱 {{ text.title }}
+        </h1>
+
+        <p>
+            {{ text.subtitle }}
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CARD
+         ===================================================== -->
+
+    <div class="card">
+
+
+        <div class="main-content">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+                 ================================================= -->
+
+            <div class="left-side">
+
+
+                <form method="POST"
+                      enctype="multipart/form-data">
+
+
+                    <!-- LANGUAGE -->
+
+                    <div class="language-box">
+
+                        <label for="language">
+
+                            Language:
+
+                        </label>
+
+
+                        <select
+                            id="language"
+                            name="language">
+
+                            <option
+                                value="English"
+                                {% if language == "English" %}
+                                selected
+                                {% endif %}>
+
+                                English
+
+                            </option>
+
+
+                            <option
+                                value="Kannada"
+                                {% if language == "Kannada" %}
+                                selected
+                                {% endif %}>
+
+                                ಕನ್ನಡ
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- UPLOAD IMAGE -->
+
+                    <label
+                        for="image"
+                        class="upload-button">
+
+                        {{ text.upload_image }}
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        required
+                        onchange="showImage(event)"
+                    >
+
+
+                    <!-- IMAGE -->
+
+                    <div
+                        class="image-container"
+                        id="image-container">
+
+
+                        {% if image_path %}
+
+                            <img
+                                src="{{ image_path }}"
+                                class="uploaded-image"
+                                alt="Uploaded Arecanut Plant Image"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+
+                                {{ text.select_image }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- PREDICT BUTTON -->
+
+                    <button type="submit" class="predict-button"> {{ text.predict }}
+                  </button>
+
+                    <a href="{{ url_for('history', language=language) }}" class="history-button">
+    📊 {{ text.history }}
+</a>
+
+
+                </form>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+                 ================================================= -->
+
+            <div class="right-side">
+
+
+                <h2>
+
+                    🔍 {{ text.prediction_result }}
+
+                </h2>
+
+
+                <!-- =================================================
+                     UNKNOWN / LOW CONFIDENCE
+                     ================================================= -->
+
+                {% if is_unknown %}
+
+                    <div class="unknown">
+
+                        ⚠️ {{ text.unable_to_detect }}
+
+                    </div>
+
+
+                    <div class="unknown-message">
+
+                        {{ text.unknown_message }}
+
+                    </div>
+
+
+                <!-- =================================================
+                     VALID PREDICTION
+                     ================================================= -->
+
+                {% elif prediction %}
+
+
+                    <!-- =================================================
+                         HEALTHY
+                         ================================================= -->
+
+                    {% if is_healthy %}
+
+
+                        <div class="healthy">
+
+                            🌱
+                            {{ text.plant_condition }}:
+                            {{ text.healthy }}
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <!-- =================================================
+                             DISEASE / PEST / CONDITION
+                             ================================================= -->
+
+                        {% if disease_info %}
+
+
+                            <!-- DISEASE -->
+
+                            <div class="detection">
+
+                                {{ text.disease_detection }}:
+
+                                <span class="detection-value">
+
+                                    {{ disease_info.display_name[language] }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- SEVERITY -->
+
+                            <div class="severity">
+
+                                {{ text.severity_level }}:
+
+                                <span class="severity-value">
+
+                                    {{ disease_info.severity[language] }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 ORGANIC TREATMENT
+                                 ================================================= -->
+
+                            <div class="section-title">
+
+                                {{ text.organic_treatment }}
+
+                            </div>
+
+
+                            <ul>
+
+                                {% for treatment in
+                                   disease_info.organic_treatment[language] %}
+
+                                    <li>
+
+                                        {{ treatment }}
+
+                                    </li>
+
+                                {% endfor %}
+
+                            </ul>
+
+
+                            <!-- =================================================
+                                 CHEMICAL TREATMENT
+                                 ================================================= -->
+
+                            <div class="section-title">
+
+                                {{ text.chemical_treatment }}
+
+                            </div>
+
+
+                            <ul>
+
+                                {% for treatment in
+                                   disease_info.chemical_treatment[language] %}
+
+                                    <li>
+
+                                        {{ treatment }}
+
+                                    </li>
+
+                                {% endfor %}
+
+                            </ul>
+
+
+                            <!-- =================================================
+                                 RECOMMENDED ACTIONS
+                                 ================================================= -->
+
+                            <div class="section-title">
+
+                                {{ text.recommended_actions }}
+
+                            </div>
+
+
+                            <ul>
+
+                                {% for action in
+                                   disease_info.recommended_actions[language] %}
+
+                                    <li>
+
+                                        {{ action }}
+
+                                    </li>
+
+                                {% endfor %}
+
+                            </ul>
+
+
+                        {% endif %}
+
+
+                    {% endif %}
+
+
+                {% else %}
+
+
+                    <!-- =================================================
+                         BEFORE PREDICTION
+                         ================================================= -->
+
+                    <p style="color:#777;">
+
+                        {{ text.upload_message }}
+
+                    </p>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             ERROR
+             ===================================================== -->
+
+        {% if error %}
+
+            <div class="error">
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE PREVIEW
+     ========================================================= -->
+
+<script>
+
+    function showImage(event) {
+
+        const file = event.target.files[0];
+
+        const container =
+            document.getElementById("image-container");
+
+
+        if (file) {
+
+            const reader = new FileReader();
+
+
+            reader.onload = function(e) {
+
+                container.innerHTML =
+                    '<img src="' +
+                    e.target.result +
+                    '" class="uploaded-image" ' +
+                    'alt="Selected Arecanut Plant Image">';
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

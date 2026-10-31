@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ text.view_details }}</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 30px;
+        }
+
+        .language {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .language a {
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 4px;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+        }
+
+        .details-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .condition-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: #c62828;
+            margin-bottom: 25px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            color: #2e7d32;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .section ul {
+            margin: 0;
+            padding-left: 25px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .severity {
+            font-weight: bold;
+            color: #c62828;
+        }
+
+        .healthy {
+            text-align: center;
+            color: #2e7d32;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 30px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-button:hover {
+            background: #1b5e20;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>
+            🔍 {{ text.view_details }}
+        </h1>
+
+        <div class="language">
+
+            <a href="?language=English">
+                English
+            </a>
+
+            <a href="?language=Kannada">
+                ಕನ್ನಡ
+            </a>
+
+        </div>
+
+        <div class="details-card">
+
+            {% if disease_info.category == "Healthy" %}
+
+                <div class="healthy">
+
+                    🌱
+                    {{ text.plant_condition }}:
+                    {{ text.healthy }}
+
+                </div>
+
+            {% else %}
+
+                <div class="condition-title">
+
+                    ⚠️
+                    {{ disease_info.display_name[language] }}
+
+                </div>
+
+
+                <div class="section">
+
+                    <h2>
+                        {{ text.severity_level }}
+                    </h2>
+
+                    <div class="severity">
+
+                        {{ disease_info.severity[language] }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="section">
+
+                    <h2>
+                        🌿 {{ text.organic_treatment }}
+                    </h2>
+
+                    <ul>
+
+                        {% for treatment in disease_info.organic_treatment[language] %}
+
+                            <li>
+                                {{ treatment }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+                <div class="section">
+
+                    <h2>
+                        🧪 {{ text.chemical_treatment }}
+                    </h2>
+
+                    <ul>
+
+                        {% for treatment in disease_info.chemical_treatment[language] %}
+
+                            <li>
+                                {{ treatment }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+                <div class="section">
+
+                    <h2>
+                        📋 {{ text.recommended_actions }}
+                    </h2>
+
+                    <ul>
+
+                        {% for action in disease_info.recommended_actions[language] %}
+
+                            <li>
+                                {{ action }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('history', language=language) }}"
+                class="back-button"
+            >
+                ← {{ text.back_to_history }}
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

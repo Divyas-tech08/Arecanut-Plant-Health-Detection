@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ text.prediction_history }}</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .language {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .language a {
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 4px;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+        }
+
+        .history-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #2e7d32;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .healthy {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .disease {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .details-button,
+        .treatment-button,
+        .progress-button {
+            display: inline-block;
+            padding: 8px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 2px;
+        }
+
+        .details-button {
+            background: #2e7d32;
+        }
+
+        .treatment-button {
+            background: #558b2f;
+        }
+
+        .progress-button {
+            background: #1976d2;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .download-button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 10px 18px;
+    background: #2e7d32;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.download-button:hover {
+    background: #1b5e20;
+}
+ 
+.clear-button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 10px 18px;
+    background: #c62828;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.clear-button:hover {
+    background: #8e0000;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>
+            📊 {{ text.prediction_history }}
+        </h1>
+
+        <div class="subtitle">
+            {{ text.previous_predictions }}
+        </div>
+
+        <!-- Language Selection -->
+
+        <div class="language">
+
+            <a href="/history?language=English">
+                English
+            </a>
+
+            <a href="/history?language=Kannada">
+                ಕನ್ನಡ
+            </a>
+
+        </div>
+
+
+        <div class="history-card">
+
+            {% if history %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            {{ text.date_time }}
+                        </th>
+
+                        <th>
+                            {{ text.condition }}
+                        </th>
+
+                        <th>
+                            {{ text.type }}
+                        </th>
+
+                        <th>
+                            {{ text.actions }}
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for item in history %}
+
+                    <tr>
+
+                        <td>
+                            {{ item[1] }}
+                        </td>
+
+
+                        <!-- CONDITION -->
+
+                        <td>
+
+                            {% if item[2] in disease_info_map %}
+
+                                {{ disease_info_map[item[2]].display_name[language] }}
+
+                            {% else %}
+
+                                {{ item[2] }}
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- TYPE -->
+
+                        <td>
+
+                            {% if item[3] == "Healthy" %}
+
+                                <span class="healthy">
+                                    🌱 {{ text.healthy_type }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="disease">
+                                    ⚠️ {{ text.disease }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('history_details', condition=item[2], language=language) }}"
+                                class="details-button"
+                            >
+                                🔍 {{ text.view_details }}
+                            </a>
+
+
+                            {% if item[3] != "Healthy" %}
+
+                                <a
+                                    href="{{ url_for('treatment', condition=item[2], language=language) }}"
+                                    class="treatment-button"
+                                >
+                                    🌿 {{ text.treatment_plan }}
+                                </a>
+
+
+                                <a
+                                    href="{{ url_for('history_progress', condition=item[2], language=language) }}"
+                                    class="progress-button"
+                                >
+                                    📈 {{ text.progress }}
+                                </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    {{ text.no_history }}
+                </div>
+
+            {% endif %}
+              
+           <a href="{{ url_for('download_history', language=language) }}" class="download-button">
+    📥 {{ text.download_history }}
+       </a>
+            
+           <a
+            href="{{ url_for('clear_history_route', language=language) }}"
+            class="clear-button"
+            onclick="return confirm('{{ text.confirm_clear_history }}');"
+        >
+            🗑️ {{ text.clear_history }}
+        </a>
+
+            <a href="/" class="back-button">
+                ← {{ text.back_to_prediction }}
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

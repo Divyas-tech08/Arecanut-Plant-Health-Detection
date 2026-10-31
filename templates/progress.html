@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ text.disease_progress }}</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .language {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .language a {
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 4px;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .condition {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #c62828;
+            margin-bottom: 30px;
+        }
+
+        .count-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #2e7d32;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            background: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>
+            📈 {{ text.disease_progress }}
+        </h1>
+
+        <div class="subtitle">
+            {{ text.previous_condition_predictions }}
+        </div>
+
+        <div class="language">
+
+            <a href="?language=English">
+                English
+            </a>
+
+            <a href="?language=Kannada">
+                ಕನ್ನಡ
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <div class="condition">
+
+                ⚠️
+
+                {% if disease_info %}
+                    {{ disease_info.display_name[language] }}
+                {% else %}
+                    {{ condition }}
+                {% endif %}
+
+            </div>
+
+
+            {% if progress %}
+
+                <div class="count-box">
+
+                    {{ text.total_detections }}:
+                    <strong>{{ progress|length }}</strong>
+
+                </div>
+
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>
+                                {{ text.date_time }}
+                            </th>
+
+                            <th>
+                                {{ text.condition }}
+                            </th>
+
+                            <th>
+                                {{ text.type }}
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in progress %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ item[1] }}
+                            </td>
+
+                            <td>
+
+                                {% if disease_info %}
+                                    {{ disease_info.display_name[language] }}
+                                {% else %}
+                                    {{ item[2] }}
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                ⚠️ {{ text.disease }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="empty">
+                    {{ text.no_records }}
+                </div>
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('history', language=language) }}"
+                class="back-button"
+            >
+                ← {{ text.back_to_history }}
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
