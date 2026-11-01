@@ -3,6 +3,9 @@ import csv
 import numpy as np
 import tensorflow as tf
 
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
+
 from history import (
     init_database,
     save_prediction,
@@ -119,10 +122,10 @@ def predict_image(image_path):
     # Model prediction
     # --------------------------------------------------------
 
-    predictions = model.predict(
-        image_array,
-        verbose=0
-    )
+    predictions = model(
+    image_array,
+    training=False
+).numpy()
 
 
     # --------------------------------------------------------
